@@ -193,7 +193,7 @@ async function autoRun() {
             let loggedIn = await isLoggedIn();
 
             if (!loggedIn) {
-                console.log(steamProfile.username + ' is logged out, re-login from the manage profiles view.'.bold.orange);
+                console.log(steamProfile.username + ' is logged out, re-login from the manage profiles view.'.bold.red);
                 continue;
             }
 
@@ -208,7 +208,7 @@ async function autoRun() {
             let failedAttempts = 0;
             for (const task of data ) {
                 if (failedAttempts == 2) {
-                    console.log('failed twice, skipping steamProfile.'.orange); // aka completed/steam limited for today
+                    console.log('failed twice, skipping steamProfile.'.bold.yellow); // aka completed/steam limited for today
                     break;
                 }
 
