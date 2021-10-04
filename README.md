@@ -34,7 +34,7 @@ node index.js
 ## Config
 `./config.json` requires your rep4rep API token.
 
-An API token can be obtained [https://rep4rep.com/user/settings/](here).
+An API token can be obtained [here](https://rep4rep.com/user/settings/).
 > Never share your rep4rep apiToken with anyone!
 
 
