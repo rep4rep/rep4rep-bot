@@ -274,9 +274,21 @@ async function addSteamAccount(err = false) {
 
 async function reloginSteamAccount() {
     rl.question("Steam Login Username: ", function(accountName) {
-    	rl.question("Password: ", function(password) {
-    		doLogin(accountName, password);
-    	});
+
+        console.log(accountName);
+        db.get('SELECT id, cookies, token FROM steamprofiles WHERE username = ?', [accountName], function(err, row) {
+          if (err) {
+            console.log(err.message);
+            process.exit();
+          }
+
+          community.setCookies(JSON.parse(row.cookies));
+          community.oAuthToken = row.token;
+
+          rl.question("Password: ", function(password) {
+      		doLogin(accountName, password);
+          });
+        });
     });
 }
 
