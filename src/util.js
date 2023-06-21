@@ -34,7 +34,7 @@ async function autoRun() {
         log(`Attempting to leave comments from: ${profile.username} (${profile.steamId})`)
 
         let hours = moment().diff(moment(profile.lastComment), 'hours');
-        if (!profile.lastComment || profile.lastComment >= 24) {
+        if (!profile.lastComment || hours >= 24) {
             let r4rSteamProfile = r4rProfiles.find(r4rProfile => r4rProfile['steamId'] == profile.steamId)
             if (!r4rSteamProfile) {
                 log(`[${profile.username}] steamProfile doesn't exist on rep4rep`)
