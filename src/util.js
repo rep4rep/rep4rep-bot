@@ -45,7 +45,7 @@ async function autoRun() {
             let tasks = await api.getTasks(r4rSteamProfile.id)
     
             let client = steamBot()
-            await client.steamLogin(profile.username, profile.password, null, null, JSON.parse(profile.cookies))
+            await client.steamLogin(profile.username, profile.password, null, null, null, JSON.parse(profile.cookies))
             if (client.status !== 4 && !await client.isLoggedIn()) {
                 log(`[${profile.username}] is logged out. reAuth needed`, true)
                 continue
@@ -106,17 +106,18 @@ async function authAllProfiles() {
     for (const [i, profile] of profiles.entries()) {
         log(`Attempting to auth: ${profile.username} (${profile.steamId})`)
         let client = steamBot()
-        await client.steamLogin(profile.username, profile.password, null, null, JSON.parse(profile.cookies))
-
+        await client.steamLogin(profile.username, profile.password, null, null, null, JSON.parse(profile.cookies))
         while (client.status !== 4 && !await client.isLoggedIn()) {
             let code = await promptForCode(profile.username, client)
             switch (client.status) {
                 case 1:
+                    await client.steamLogin(profile.username, profile.password, code)
+                    break
                 case 2:
-                    await client.steamLogin(profile.username, profile.password, code, null)
+                    await client.steamLogin(profile.username, profile.password, null, code)
                     break
                 case 3:
-                    await client.steamLogin(profile.username, profile.password, null, code)
+                    await client.steamLogin(profile.username, profile.password, null, null, code)
                     break
             }
         }
@@ -165,20 +166,22 @@ async function showAllProfiles() {
     console.log(table(data))
 }
 
-async function addProfileSetup(accountName, password, authCode, captcha) {
+async function addProfileSetup(accountName, password, authCode, twoFactorCode, captcha) {
     let client = steamBot()
 
-    await client.steamLogin(accountName, password, authCode, captcha);
+    await client.steamLogin(accountName, password, authCode, twoFactorCode, captcha);
 
     if (client.status !== 4 && !await client.isLoggedIn()) {
         let code = await promptForCode(accountName, client)
         switch (client.status) {
             case 1:
+                await addProfileSetup(accountName, password, code)
+                return
             case 2:
-                await addProfileSetup(accountName, password, code, null)
+                await addProfileSetup(accountName, password, null, code)
                 return
             case 3:
-                await addProfileSetup(accountName, password, null, code)
+                await addProfileSetup(accountName, password, null, null, code)
                 return
             default:
                 process.exit()

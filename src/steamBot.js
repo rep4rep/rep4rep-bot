@@ -36,7 +36,7 @@ export default (config) => {
         })
     }
 
-    client.steamLogin = async (accountName, password, authCode, captcha, cookies) => {
+    client.steamLogin = async (accountName, password, authCode, twoFactorCode, captcha, cookies) => {
         if (cookies) {
             community.setCookies(cookies)
         }
@@ -45,6 +45,7 @@ export default (config) => {
                 accountName: accountName,
                 password: password,
                 authCode: authCode,
+                twoFactorCode: twoFactorCode,
                 captcha: captcha
             }, async (err, sessionID, cookies, steamguard) => {
                 if (err) {
