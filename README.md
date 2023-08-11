@@ -62,4 +62,4 @@ Remove profile
 ```
 
 ## Support
-https://discord.com/invite/S8hsc4MCHf
+https://discord.gg/U7myGBcXTT
